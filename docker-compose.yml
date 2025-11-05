@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: smuggledemo-app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src:/app/src:rw
+      - ./symbols:/symbols
+  nginx:
+    image: nginx:1.25
+    container_name: smuggledemo-nginx
+    depends_on: [app]
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro

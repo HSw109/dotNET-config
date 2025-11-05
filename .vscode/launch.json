@@ -1,0 +1,32 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+    "name": "Attach to .NET in Docker (step into libs)",
+    "type": "coreclr",
+    "request": "attach",
+    "processId": "${command:pickRemoteProcess}",
+
+    "justMyCode": false,                 // <-- TẮT Just My Code
+    "requireExactSource": false,
+    "enableStepFiltering": false,
+    "suppressJITOptimizations": true,    // hạn chế tối ưu hoá khi có thể
+
+    "symbolOptions": {
+      "searchMicrosoftSymbolServer": true,   // tải PDB .NET/ASP.NET từ MS
+      "searchNuGetOrgSymbolServer": true,    // tải PDB của package nuget
+      "cachePath": "/symbols"                // cache PDB trong container
+    },
+
+    "sourceFileMap": { "/app/src": "${workspaceFolder}/src" },
+
+    "pipeTransport": {
+      "pipeCwd": "${workspaceFolder}",
+      "pipeProgram": "docker",
+      "pipeArgs": ["exec", "-i", "smuggledemo-app", "sh", "-lc"],
+      "debuggerPath": "/vsdbg/vsdbg",
+      "quoteArgs": false
+    }
+  }
+  ]
+}
