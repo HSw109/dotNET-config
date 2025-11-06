@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -6,6 +7,15 @@ var app = builder.Build();
 app.MapGet("/", () => "Hello World!");
 
 app.MapGet("/poc", () => Results.Ok("solve!"));
+
+app.MapPost("/poc", async (HttpContext ctx) =>
+{
+    string body;
+    var reader = new StreamReader(ctx.Request.Body);
+    body = await reader.ReadToEndAsync();
+    Console.WriteLine(body);
+    return Results.Ok(body);
+});
 
 app.MapGet("/admin", (HttpContext ctx) =>
 {
